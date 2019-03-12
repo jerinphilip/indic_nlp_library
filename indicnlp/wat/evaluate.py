@@ -56,16 +56,19 @@ class Evaluator:
                 self.src_lang, self.tgt)
 
         bleu = compute_bleu(tokenized_srcs, tokenized_tgt)
-        print(bleu)
+        return {"BLEU": bleu}
 
 
     def normalize_and_tokenize(self, lang, fname):
+        factory = IndicNormalizerFactory()
+        normalizer = factory.get_normalizer(lang, remove_nuktas=False)
         tokenized_file = fname.replace('/', '_')
         tokenized_file = os.path.join('/tmp', tokenized_file)
         with open(fname) as istream:
             with open(tokenized_file, 'w+') as ostream:
                 for line in istream:
                     line = line.strip()
+                    line = normalizer.normalize(line)
                     tokens = tokenize(line, lang=self.src_lang)
                     tokenized_line = ' '.join(tokens)
                     print(tokenized_line, file=ostream)
@@ -77,7 +80,9 @@ def main():
 
     args = parser.parse_args()
     evaluator = Evaluator.build(args)
-    evaluator.run()
+    stats = evaluator.run()
+    for key, val in stats.items():
+        print(key, val)
 
 if __name__ == '__main__':
     main()
