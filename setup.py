@@ -167,7 +167,7 @@ setup(
     # If using Python 2.6 or earlier, then these have to be included in
     # MANIFEST.in as well.
     package_data={  # Optional
-        'indicnlp.wat': ['multi-bleu.perl'],
+        'indicnlp.contrib.wat': ['multi-bleu.perl'],
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
@@ -186,7 +186,7 @@ setup(
     # executes the function `main` from this package when invoked:
     entry_points={  # Optional
         'console_scripts': [
-            'wat-stats=indicnlp.wat.evaluate:main',
+            'wat-stats=indicnlp.contrib.wat.evaluate:main',
         ],
     },
 

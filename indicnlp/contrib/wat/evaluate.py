@@ -6,6 +6,7 @@ from indicnlp.normalize.indic_normalize \
         import IndicNormalizerFactory
 from indicnlp.tokenize.indic_tokenize \
         import trivial_tokenize as tokenize
+import warnings
 
 
 def compute_bleu(refs, hyp):
@@ -25,10 +26,13 @@ class Evaluator:
             lang = self.infer_langs(src)
             if self.src_lang == None:
                 self.src_lang = lang
-            assert(self.src_lang == lang)
+            if not (self.src_lang == lang):
+                warnings.warn("Reference languages seem to be different, please check?")
 
         self.tgt_lang = self.infer_langs(self.tgt)
-        assert(self.tgt_lang == self.src_lang)
+        if not(self.tgt_lang == self.src_lang):
+                warnings.warn("Hypothesis Language seem to be different, please check?")
+
 
     @staticmethod
     def add_args(parser):
