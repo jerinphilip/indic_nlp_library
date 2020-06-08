@@ -14,8 +14,13 @@ def compute_bleu(refs, hyp):
     moses_mbleu = os.path.join(_dir, 'multi-bleu.perl')
     refs = ' '.join(refs)
     cmd = 'perl {} {} < {}'.format(moses_mbleu, refs, hyp)
-    output = sp.run(cmd, shell=True, capture_output=True).stdout
-    return output.decode("utf-8")
+    try:
+        output = sp.run(cmd, shell=True, capture_output=True).stdout
+    except:
+        output = sp.run(cmd, stdout=sp.PIPE, shell=True).stdout
+
+    output = output.decode("utf-8")
+    return output
 
 class Evaluator:
     def __init__(self, srcs, tgt, src_lang=None):
